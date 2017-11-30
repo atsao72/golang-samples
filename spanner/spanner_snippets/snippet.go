@@ -448,6 +448,7 @@ func run(ctx context.Context, adminClient *database.DatabaseAdminClient, dataCli
                 os.Exit(2)
         }
 
+        //This is hacky, but basically loop 100 times, executing a write and a read, regardless of what cmdFn is.
         var times []time.Duration
         var readTimes []time.Duration
         var err error
@@ -468,6 +469,7 @@ func run(ctx context.Context, adminClient *database.DatabaseAdminClient, dataCli
                 readTimes = append(readTimes, elapsed)
         }
 
+        //Sort the times so can easily get percentiles.
         sort.Slice(times, func(i, j int) bool { return times[i] < times[j] })
         sort.Slice(readTimes, func(i, j int) bool { return readTimes[i] < readTimes[j] })
         log.Printf("Median %s: %s", cmd, times[len(times)/2])
